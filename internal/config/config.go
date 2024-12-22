@@ -10,17 +10,18 @@ import (
 
 type Config struct {
 // HTTPServer options
-   Address     string        `yaml:"address" env-default:"localhost:8899"`
+   Address     string        `yaml:"address" env-default:"localhost:8877"`
 	Timeout     time.Duration `yaml:"timeout" env-default:"5s"`
 	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"80s"`
 }
 
-func MustLoad() *Config {
-	configPath := os.Getenv("CONFIG_PATH")
+func Load() *Config {
+	configPath := os.Getenv("WCALC_CONFIG_PATH")
 	if configPath == "" {
-		log.Fatal("CONFIG_PATH is not set")
+		log.Printf("environment variable WCALC_CONFIG_PATH  is not set, using ./config.yaml")
+      configPath = "./config.yaml"
 	}
-	// check if file exists
+	// check if config file exists
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		log.Fatalf("config file does not exist: %s", configPath)
 	}
